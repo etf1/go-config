@@ -1,7 +1,7 @@
 # e-TF1 go-config
 
-Package e-TF1 go-config allow you to load your application config from multiple source (dotenv, env, flags...).  
-This package is build on top of [confita](https://github.com/heetch/confita) 
+Package e-TF1 go-config allows you to load your application configuration from multiple sources (dotenv, env, flags...).  
+This package is built on top of [confita](https://github.com/heetch/confita) 
 
 The main difference with confita is that the last loader that matches the config key will override the previous match.
 
@@ -54,7 +54,7 @@ It will print something similar to
 
 # Loaders 
 
-The library provider provide a DefaultConfigLoader that load from
+The library provides a DefaultConfigLoader that load from
 
 - .env (if file ./.env was found)
 - environment variables
@@ -87,7 +87,7 @@ if _, err := os.Stat(f); err == nil {
 
 # Printer
 
-The library provide you a config table printer. A special tag `print:"-"` prevent config value to be printed.
+The library provides you a config table printer. A special tag `print:"-"` prevents config value to be printed.
 
 ```
 -----------------------------------
