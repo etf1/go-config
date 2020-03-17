@@ -101,7 +101,7 @@ The library provides you a config table printer. A special tag `print:"-"` preve
 
 ```
 -----------------------------------
-       Debug|                false|bool `config:"DEBUG"`
+       Debug|                false|bool   `config:"DEBUG"`
     HTTPAddr|                :8001|string `config:"HTTP_ADDR"`
  BDDPassword| *** Hidden value ***|string `config:"BDD_PASSWORD" print:"-"`
 -----------------------------------
