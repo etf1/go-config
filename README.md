@@ -3,7 +3,11 @@
 Package e-TF1 go-config allows you to load your application configuration from multiple sources (dotenv, env, flags...).  
 This package is built on top of [confita](https://github.com/heetch/confita) 
 
-The main difference with confita is that the last loader that matches the config key will override the previous match.
+The main differences with confita are the following:
+
+ - all the backend matched value are write on given struct 
+ - the last loader that matches the config key will override the previous match
+ - we allow to override by empty string
 
 # Quick Usage
 
