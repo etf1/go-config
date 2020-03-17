@@ -28,7 +28,7 @@ type MyConfig struct {
 func New(context context.Context) *MyConfig {
 	cfg := &MyConfig{
 		HTTPAddr: ":8001",
-        BDDPassword: "my_fake_password",
+		BDDPassword: "my_fake_password",
 	}
 
 	config.LoadOrFatal(context, cfg) // It use the DefaultConfigLoader
@@ -54,7 +54,7 @@ It will print something similar to
 
 # Loaders 
 
-The library provides a DefaultConfigLoader that load from
+The library provides a DefaultConfigLoader that loads from
 
 - .env (if file ./.env was found)
 - environment variables
