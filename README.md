@@ -5,8 +5,8 @@ This package is built on top of [confita](https://github.com/heetch/confita)
 
 The main differences with confita are the following:
 
- - all the backend matched value are write on given struct 
- - the last loader that matches the config key will override the previous match
+ - all the backend matched value is written on a struct (confita will only load the last backend that matched at least one value)
+ - the last backend that matches the config key will override the previous match
  - we allow to override by empty string
 
 # Quick Usage
