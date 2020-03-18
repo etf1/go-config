@@ -1,4 +1,4 @@
-module github.com/etf1/config
+module github.com/etf1/go-config
 
 go 1.13
 

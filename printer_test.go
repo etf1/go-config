@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/etf1/config"
+	"github.com/etf1/go-config"
 )
 
 type object struct {
