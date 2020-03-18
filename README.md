@@ -20,7 +20,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/etf1/config"
+	"github.com/etf1/go-config"
 )
 
 type MyConfig struct {

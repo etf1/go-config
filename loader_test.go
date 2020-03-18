@@ -7,7 +7,7 @@ import (
 	"github.com/heetch/confita/backend"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/etf1/config"
+	"github.com/etf1/go-config"
 )
 
 type Conf struct {

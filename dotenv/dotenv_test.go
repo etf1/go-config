@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/etf1/config/dotenv"
+	"github.com/etf1/go-config/dotenv"
 )
 
 func TestNewBackend_UnknowFile(t *testing.T) {

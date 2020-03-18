@@ -9,8 +9,8 @@ import (
 	"github.com/heetch/confita/backend"
 	"github.com/heetch/confita/backend/flags"
 
-	"github.com/etf1/config/dotenv"
-	"github.com/etf1/config/env"
+	"github.com/etf1/go-config/dotenv"
+	"github.com/etf1/go-config/env"
 )
 
 var DefaultConfigLoader = NewDefaultConfigLoader()
