@@ -17,6 +17,22 @@ func TestNewBackend_UnknowFile(t *testing.T) {
 	})
 }
 
+func TestNewBackend_Panic(t *testing.T) {
+	t.Run("Is a directory", func(t *testing.T) {
+		assert.PanicsWithError(t, "read ./testdata: is a directory", func() {
+			dotenv.NewBackend("./testdata")
+		})
+	})
+
+	t.Run("Permission denied", func(t *testing.T) {
+		_ = os.Chmod("./testdata/.env.denied", 000)
+		defer os.Chmod("./testdata/.env.denied", 644)
+		assert.PanicsWithError(t, "open ./testdata/.env.denied: permission denied", func() {
+			dotenv.NewBackend("./testdata/.env.denied")
+		})
+	})
+}
+
 func TestNewBackend(t *testing.T) {
 	b := dotenv.NewBackend("testdata/.env")
 
@@ -61,6 +77,17 @@ func TestNewBackend_Multiple(t *testing.T) {
 	})
 }
 
+func TestGetBackend_Panic(t *testing.T) {
+	t.Run("File denied", func(t *testing.T) {
+		_ = os.Chmod("./testdata/.env.denied", 000)
+		defer os.Chmod("./testdata/.env.denied", 644)
+
+		assert.PanicsWithError(t, "open testdata/.env.denied: permission denied", func() {
+			dotenv.GetBackends("testdata/.env.denied")
+		})
+	})
+}
+
 func TestGetBackend(t *testing.T) {
 	t.Run("One Backend", func(t *testing.T) {
 		backends := dotenv.GetBackends("testdata/.env")
@@ -74,6 +101,11 @@ func TestGetBackend(t *testing.T) {
 
 	t.Run("File Not found", func(t *testing.T) {
 		backends := dotenv.GetBackends("testdata/.env", "unexisting.file")
+		assert.Len(t, backends, 1)
+	})
+
+	t.Run("Directory", func(t *testing.T) {
+		backends := dotenv.GetBackends("testdata/.env", "./testdata")
 		assert.Len(t, backends, 1)
 	})
 }

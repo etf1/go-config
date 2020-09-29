@@ -53,7 +53,7 @@ func GetBackendsFromFlag() []backend.Backend {
 func GetBackends(paths ...string) []backend.Backend {
 	var backends []backend.Backend
 	for _, dotFile := range paths {
-		if _, err := os.Stat(dotFile); err == nil {
+		if f, err := os.Stat(dotFile); err == nil && !f.IsDir() {
 			backends = append(backends, NewBackend(dotFile))
 		}
 	}
