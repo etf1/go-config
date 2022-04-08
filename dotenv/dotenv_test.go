@@ -53,6 +53,15 @@ func TestNewBackend(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, "my value", string(result))
 	})
+
+	t.Run("Value Multiline Matched", func(t *testing.T) {
+		result, err := b.Get(context.TODO(), "multi")
+		assert.NoError(t, err)
+
+		expectedValue := `a
+b`
+		assert.Equal(t, expectedValue, string(result))
+	})
 }
 
 func TestNewBackend_Multiple(t *testing.T) {
