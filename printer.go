@@ -2,8 +2,8 @@ package config
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
-	"io"
 	"reflect"
 	"text/tabwriter"
 )
@@ -11,15 +11,51 @@ import (
 func TableString(iface interface{}) string {
 	b := &bytes.Buffer{}
 	w := tabwriter.NewWriter(b, 0, 0, 1, ' ', tabwriter.AlignRight|tabwriter.Debug)
+
+	onStruct := func(f reflect.StructField, v reflect.Value) error {
+		fmt.Fprintf(w, "##### %s #####\n", f.Name)
+		return nil
+	}
+	onStructField := func(f reflect.StructField, v reflect.Value) error {
+		val := v.Interface()
+		if v, ok := f.Tag.Lookup("print"); ok && v == "-" {
+			val = "*** Hidden value ***"
+		}
+		fmt.Fprintf(w, "%s\t\x1b[0m%v\t\x1b[1;34m%s\x1b[0m \x1b[1;92m`%s`\x1b[0m\n", f.Name, val, v.Type().String(), f.Tag)
+		return nil
+	}
+
 	fmt.Fprint(w, "\n-----------------------------------\n")
-	fprint(w, iface)
+	walk(iface, onStruct, onStructField)
 	fmt.Fprint(w, "-----------------------------------\n")
 	w.Flush()
 
 	return b.String()
 }
 
-func fprint(w io.Writer, iface interface{}) {
+func JSON(iface interface{}) ([]byte, error) {
+	m := make(map[string]interface{})
+
+	onStruct := func(f reflect.StructField, v reflect.Value) error {
+		return nil
+	}
+	onStructField := func(f reflect.StructField, v reflect.Value) error {
+		val := v.Interface()
+		if tagValue, ok := f.Tag.Lookup("print"); ok && tagValue == "-" {
+			val = "*** Hidden value ***"
+		}
+		if name, ok := f.Tag.Lookup("config"); ok {
+			m[name] = val
+		}
+		return nil
+	}
+
+	walk(iface, onStruct, onStructField)
+
+	return json.Marshal(m)
+}
+
+func walk(iface interface{}, onStruct, onStructField func(f reflect.StructField, v reflect.Value) error) {
 	value := reflect.ValueOf(iface)
 
 	if value.Kind() != reflect.Struct {
@@ -33,17 +69,12 @@ func fprint(w io.Writer, iface interface{}) {
 		}
 		typeField := value.Type().Field(i)
 		if field.Kind() == reflect.Struct {
-			fmt.Fprintf(w, "##### %s #####\n", typeField.Name)
+			onStruct(typeField, field)
 			iface := field.Interface()
-			fprint(w, iface)
-
+			walk(iface, onStruct, onStructField)
 			continue
 		}
 
-		val := field.Interface()
-		if v, ok := typeField.Tag.Lookup("print"); ok && v == "-" {
-			val = "*** Hidden value ***"
-		}
-		fmt.Fprintf(w, "%s\t\x1b[0m%v\t\x1b[1;34m%s\x1b[0m \x1b[1;92m`%s`\x1b[0m\n", typeField.Name, val, field.Type().String(), typeField.Tag)
+		onStructField(typeField, field)
 	}
 }
